@@ -29,6 +29,24 @@ python -m pip install -r requirements.txt
 python scripts/preflight.py
 ```
 
+Current Tesseract version in this environment:
+
+```powershell
+tesseract --version
+# tesseract v5.5.3.20260724
+#  leptonica-1.87.0
+#   libgif 5.2.2 : libjpeg 8d (libjpeg-turbo 3.1.3) : libpng 1.6.58 : libtiff 4.7.2 : zlib 1.3.1 : libwebp 1.6.0 : libopenjp2 2.5.4
+#  Found AVX512BW
+#  Found AVX512F
+#  Found AVX512VNNI
+#  Found AVX2
+#  Found AVX
+#  Found FMA
+#  Found SSE4.1
+#  Found libarchive 3.8.8 zlib/1.3.2 liblzma/5.8.3 bz2lib/1.0.8 liblz4/1.10.0 libzstd/1.5.7 expat/expat_2.8.2 cng/1.0 libb2/system
+#  Found libcurl/8.21.0 Schannel zlib/1.3.2 brotli/1.2.0 zstd/1.5.7 libidn2/2.3.8 libpsl/0.21.5 libssh2/1.11.1 WinLDAP
+```
+
 The preflight reports the Python version, checks imports for the core packages,
 looks for Tesseract, and reports whether optional Presidio and Ultralytics
 packages are installed. Missing core imports or a Python version other than
@@ -91,6 +109,8 @@ With the core environment installed and active, run:
 python scripts/preflight.py
 python -m pytest
 ```
+
+Summary: 50 passed, 0 failed, 1 skipped in 6.03s.
 
 For the requested direct checks, run:
 
@@ -174,5 +194,5 @@ outputs are written under the specified new directory.
 - This is an early prototype, not a validated payment-card data protection
   system. OCR and redaction can miss or misclassify sensitive information;
   never rely on it to protect real data.
-- The project is under a OneDrive - MAQ Software folder, so files may sync to
-  that account. Do not store real sensitive data in this location.
+- The project lives in a local workspace. Keep files on this machine and do not
+  store real sensitive data in this location.

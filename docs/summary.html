@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Screen PCI Redaction POC Summary</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 8mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      color: #111;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8.5pt;
+      line-height: 1.22;
+      margin: 0 auto;
+      width: 194mm;
+    }
+
+    h1 {
+      font-size: 17pt;
+      line-height: 1.08;
+      margin: 0 0 1mm;
+    }
+
+    h2 {
+      font-size: 9.5pt;
+      margin: 2mm 0 1mm;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .meta {
+      display: flex;
+      gap: 4mm;
+      justify-content: space-between;
+      margin-bottom: 1.5mm;
+    }
+
+    .meta a {
+      color: #111;
+    }
+
+    .claim {
+      font-size: 9pt;
+      font-weight: bold;
+      margin-bottom: 1mm;
+    }
+
+    .sample {
+      margin-bottom: 1mm;
+    }
+
+    .chart {
+      display: block;
+      height: 47mm;
+      object-fit: contain;
+      width: 100%;
+    }
+
+    .failures {
+      display: grid;
+      gap: 3mm;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    figure {
+      margin: 0;
+      min-width: 0;
+    }
+
+    figure img {
+      border: 0.25mm solid #777;
+      display: block;
+      height: 44mm;
+      object-fit: contain;
+      width: 100%;
+    }
+
+    figcaption {
+      font-size: 7.5pt;
+      margin-top: 1mm;
+    }
+
+    table {
+      border-collapse: collapse;
+      font-size: 7.5pt;
+      table-layout: fixed;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 0.25mm solid #555;
+      padding: 1mm 1.3mm;
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    th {
+      background: #e8e8e8;
+    }
+
+    th:first-child,
+    td:first-child {
+      width: 37%;
+    }
+
+    .table-note {
+      font-size: 7.5pt;
+      margin: 0.5mm 0 1mm;
+    }
+
+    .bottom {
+      display: grid;
+      gap: 3mm;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 2mm;
+    }
+
+    .box {
+      border: 0.4mm solid #222;
+      padding: 1.8mm 2mm;
+    }
+
+    .box h2 {
+      margin-top: 0;
+    }
+
+    .lessons p + p {
+      margin-top: 1.2mm;
+    }
+
+    .closing {
+      border-top: 0.25mm solid #555;
+      font-size: 8pt;
+      margin-top: 2mm;
+      padding-top: 1.5mm;
+    }
+  </style>
+</head>
+<body>
+  <h1>Screen PCI Redaction POC</h1>
+  <div class="meta">
+    <span>Rishabh2503</span>
+    <span><!-- DATE_START -->
+12 October 2026
+      <!-- DATE_END --></span>
+    <a href="https://github.com/Rishabh2503/screen-pci-poc">github.com/Rishabh2503/screen-pci-poc</a>
+  </div>
+  <p class="claim">A context-aware redactor scored 1.00 recall on a clean synthetic set and 0.20 on an adversarial one (baseline: 0.85).</p>
+  <p class="sample"><!-- SAMPLE_START -->
+Final split: 15 images, 9 cards
+      <!-- SAMPLE_END --></p>
+
+  <h2>Recall: clean and adversarial synthetic sets</h2>
+  <img class="chart" src="recall_chart.png" alt="Baseline and context-only recall comparison; exact values are labeled">
+
+  <h2>Sanitized failure examples</h2>
+  <div class="failures">
+    <figure>
+      <img src="images/baseline_false_positive_field_crop.png" alt="Enlarged sanitized account-reference field with a false-positive outline">
+      <figcaption>Baseline treated a Luhn-valid account reference as a card candidate.</figcaption>
+    </figure>
+    <figure>
+      <img src="images/context_aware_false_negative_field_crop.png" alt="Enlarged sanitized card field with no nearby label">
+      <figcaption>Without label evidence, context-only rejected a true card candidate.</figcaption>
+    </figure>
+    <figure>
+      <img src="images/baseline_false_negative_field_crop.png" alt="Enlarged sanitized cropped card-number field">
+      <figcaption>Cropped OCR text prevented the baseline from detecting the card.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Hybrid audit — final split</h2>
+  <p class="table-note">Recognition is measured on OCR output, before the masking decision.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Baseline</th>
+        <th>Context-only</th>
+        <th>Hybrid</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- TABLE_ROWS_START -->
+      <tr><td>Localization TP / FP / FN</td><td>8 / 4 / 1</td><td>2 / 1 / 7</td><td>9 / 5 / 0</td></tr>
+      <tr><td>Complete-number TP / FP / FN</td><td>8 / 4 / 1</td><td>8 / 4 / 1</td><td>8 / 4 / 1</td></tr>
+      <tr><td>Mean card-text coverage</td><td>88.0%</td><td>22.0%</td><td>94.9%</td></tr>
+      <tr><td>False redactions: decoy / ordinary-negative</td><td>4 / 0</td><td>1 / 0</td><td>4 / 1</td></tr>
+      <tr><td>Needs-review candidates: masked / total</td><td>0 / 0</td><td>0 / 4</td><td>6 / 6</td></tr>
+      <!-- TABLE_ROWS_END -->
+    </tbody>
+  </table>
+
+  <div class="bottom">
+    <section class="box">
+      <h2>Limits</h2>
+      <p>All results are synthetic and template-limited. Hybrid mean card-box coverage is 94.9%, not full protection. Localization and exact complete-number recognition are different measures; these results do not establish real-world PCI protection or compliance.</p>
+    </section>
+    <section class="box lessons">
+      <h2>What changed and what I learned</h2>
+      <p>Adding label context removed clean-set false positives without changing recall on that set.</p>
+      <p>Adversarial layouts and labels reduced context-only recall to 0.20.</p>
+      <p>The hybrid policy restored localization and coverage, but also redacted ordinary-negative text.</p>
+    </section>
+  </div>
+
+  <p class="closing">This is a controlled synthetic experiment, not a validated data-protection system.</p>
+</body>
+</html>

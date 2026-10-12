@@ -1,0 +1,39 @@
+# Virtual environments and Python caches
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test and coverage artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+docs/test_log.txt
+docs/REVIEW_HANDOFF.md
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.local
+*.local.*
+.vscode/settings.json
+
+# Generated datasets, outputs, and model checkpoints
+data/
+datasets/
+artifacts/
+outputs/
+runs/
+/screenshots/
+/recordings/
+/raw/
+/unredacted/
+/temp/
+/tmp/
+/generated/
+*.pt
+*.pth
+*.onnx
+*.engine
+*.safetensors
